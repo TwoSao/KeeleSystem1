@@ -1,0 +1,33 @@
+﻿@model KeeleSystem.Models.Training
+
+@{
+    ViewBag.Title = "Registreerimine";
+}
+
+<h2>Registreerimine</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Course.Nimetus</h5>
+        <p class="card-text">
+            Õpetaja: <strong>@Model.Teacher.Nimi</strong><br />
+            Aeg: @Model.AlgusKuupaev.ToShortDateString() – @Model.LoppKuupaev.ToShortDateString()<br />
+            Hind: @Model.Hind €<br />
+            Keel: @Model.Course.Keel
+        </p>
+
+        @using (Html.BeginForm("CreateConfirmed", "Enrollment", new { trainingId = Model.Id }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary">Kinnita registreerimine</button>
+            <a href="@Url.Action("Index", "Trainings")" class="btn btn-outline-secondary ms-2">Tagasi</a>
+        }
+    </div>
+</div>

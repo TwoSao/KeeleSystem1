@@ -1,0 +1,27 @@
+﻿@model IEnumerable<KeeleSystem.Models.Enrollment>
+
+<h2>Enrollments (Admin / Test)</h2>
+
+@if (!Model.Any())
+{
+    <p>No enrollments yet.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Koolitus</th>
+            <th>Õpilane</th>
+            <th>Staatus</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Training.Course.Nimetus</td>
+                <td>@item.User.Email</td>
+                <td>@item.Status</td>
+            </tr>
+        }
+    </table>
+}

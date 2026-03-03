@@ -1,0 +1,54 @@
+﻿@model IEnumerable<KeeleSystem.Models.Training>
+
+<h2>Koolitused</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+@foreach (var item in Model)
+{
+    var osalejaid = item.Enrollments?.Count() ?? 0;
+    bool grupptais = osalejaid >= item.MaxOsalejaid;
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>
+                <span class="me-1">@item.Course.FlagEmoji</span>
+                @item.Course.Nimetus
+            </h5>
+
+            <p>
+                Õpetaja: <strong>@item.Teacher.Nimi</strong><br />
+                Aeg: @item.AlgusKuupaev.ToShortDateString()
+                – @item.LoppKuupaev.ToShortDateString()<br />
+                Hind: @item.Hind €<br />
+                Keel: @item.Course.Keel<br />
+                Kohti: @osalejaid / @item.MaxOsalejaid
+            </p>
+
+            @if (grupptais)
+            {
+                <span class="badge badge-danger">GRUPP TÄIS</span>
+            }
+            else
+            {
+                <a class="btn btn-primary"
+                   href="@Url.Action("Create", "Enrollment", new { trainingId = item.Id })">
+                    Registreeru
+                </a>
+            }
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <a class="btn btn-outline-secondary ms-2"
+                   href="@Url.Action("EmailTraining", "AdminEnrollments", new { id = item.Id })">
+                    Saada e-kiri grupile
+                </a>
+            }
+        </div>
+    </div>
+}

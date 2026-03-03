@@ -1,0 +1,51 @@
+﻿@model KeeleSystem.Controllers.TeacherDashboardVM
+
+<h2>Töölaud</h2>
+
+<p><strong>Õpetaja:</strong> @Model.TeacherName</p>
+
+@if (Model.Trainings == null || !Model.Trainings.Any())
+{
+    <div class="alert alert-info">Sul ei ole veel ühtegi koolitust.</div>
+}
+else
+{
+    foreach (var t in Model.Trainings)
+    {
+        var count = t.Enrollments?.Count() ?? 0;
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@t.Course.Nimetus</h5>
+                <p class="card-text">
+                    Aeg: @t.AlgusKuupaev.ToShortDateString() – @t.LoppKuupaev.ToShortDateString()<br />
+                    Osalejaid: @count / @t.MaxOsalejaid
+                </p>
+
+                <h6>Õpilased</h6>
+
+                @if (t.Enrollments == null || !t.Enrollments.Any())
+                {
+                    <p>Hetkel pole ühtegi registreeringut.</p>
+                }
+                else
+                {
+                    <table class="table table-sm">
+                        <tr>
+                            <th>Email</th>
+                            <th>Staatus</th>
+                        </tr>
+
+                        @foreach (var e in t.Enrollments)
+                        {
+                            <tr>
+                                <td>@(e.User != null ? e.User.Email : e.ApplicationUserId)</td>
+                                <td>@e.Status</td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+    }
+}

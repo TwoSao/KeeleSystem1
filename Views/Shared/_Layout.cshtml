@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+        <div class="container">
+            @Html.ActionLink("KeeleSystem", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                    <li class="nav-item">
+                        @Html.ActionLink("Kursused", "Index", "Courses", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Koolitused", "Index", "Trainings", null, new { @class = "nav-link" })
+                    </li>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Opilane"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Minu koolitused", "MyCourses", "Enrollment", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Opetaja"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Töölaud", "Index", "Teacher", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Haldus", "Pending", "AdminEnrollments", null, new { @class = "nav-link" })
+                        </li>
+                    }
+
+                </ul>
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

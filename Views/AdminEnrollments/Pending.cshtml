@@ -1,0 +1,40 @@
+﻿@model IEnumerable<KeeleSystem.Models.Enrollment>
+
+<h2>Ootel registreerimised</h2>
+
+<p>
+    <a class="btn btn-secondary" href="@Url.Action("Index","AdminEnrollments")">Näita kõik</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p>Kõik registreerimised on töödeldud.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Kursus</th>
+            <th>Õpetaja</th>
+            <th>Õpilane</th>
+            <th>Staatus</th>
+            <th></th>
+        </tr>
+
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td>@e.Training.Course.Nimetus</td>
+                <td>@e.Training.Teacher.Nimi</td>
+                <td>@(e.User != null ? e.User.Email : e.ApplicationUserId)</td>
+                <td>
+                    <span class="badge badge-warning">@e.Status</span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-success" href="@Url.Action("Confirm", "AdminEnrollments", new { id = e.Id })">Kinnita</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("Cancel", "AdminEnrollments", new { id = e.Id })">Tühista</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

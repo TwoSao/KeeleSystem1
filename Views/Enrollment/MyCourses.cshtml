@@ -1,0 +1,36 @@
+﻿@model IEnumerable<KeeleSystem.Models.Enrollment>
+
+<h2>Minu koolitused</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>Sa ei ole veel ühelegi koolitusele registreerunud.</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Kursus</th>
+            <th>Algus</th>
+            <th>Lõpp</th>
+            <th>Staatus</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Training.Course.Nimetus</td>
+                <td>@item.Training.AlgusKuupaev.ToShortDateString()</td>
+                <td>@item.Training.LoppKuupaev.ToShortDateString()</td>
+                <td>@item.Status</td>
+            </tr>
+        }
+    </table>
+}
